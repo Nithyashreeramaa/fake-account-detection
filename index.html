@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Profile Detector</title>
+</head>
+<body>
+    <h1>Fake Social Media Profile Detector</h1>
+    <form id="profile-form">
+        <label for="account_age">Account Age (months):</label>
+        <input type="number" id="account_age" name="account_age" required><br>
+
+        <label for="followers">Followers:</label>
+        <input type="number" id="followers" name="followers" required><br>
+
+        <label for="following">Following:</label>
+        <input type="number" id="following" name="following" required><br>
+
+        <label for="post_frequency">Post Frequency:</label>
+        <input type="number" id="post_frequency" name="post_frequency" required><br>
+
+        <button type="submit">Detect</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('profile-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting the default way
+
+            const data = {
+                account_age: document.getElementById('account_age').value,
+                followers: document.getElementById('followers').value,
+                following: document.getElementById('following').value,
+                post_frequency: document.getElementById('post_frequency').value,
+            };
+
+            fetch('/detect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = data.is_fake ? 'This profile is likely fake.' : 'This profile is likely genuine.';
+            });
+        });
+    </script>
+</body>
+</html>
